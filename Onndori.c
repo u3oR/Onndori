@@ -133,8 +133,11 @@ int Onndori_Yield(void)
         
         if (pTimer->cb.Callback != NULL)
         {
+            OnndoriCallback_ft Callback = pTimer->cb.Callback;
+            void *pUserData = pTimer->cb.pUserData;
+
             Onndori_UnLock();
-            pTimer->cb.Callback(pTimer, pTimer->cb.pUserData);
+            Callback(pTimer, pUserData);
             Onndori_Lock();
         }
         
