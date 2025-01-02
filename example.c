@@ -14,7 +14,7 @@ uint64_t GetPlatformTicks(void)
     struct timeval tTime = {0};
     gettimeofday(&tTime, NULL);
     return tTime.tv_sec;
-    // return tTime.tv_sec * 1000 + tTime.tv_usec / 1000;
+    // return (uint64_t)tTime.tv_sec * 1000 + tTime.tv_usec / 1000;
 #else
     return 0;
 #endif
