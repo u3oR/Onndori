@@ -7,15 +7,7 @@
 extern "C" {
 #endif
 
-#if defined(__linux__)
-    #include <pthread.h>
-    typedef pthread_mutex_t OnndoriLock_t;
-    #define ONNDORI_LOCK_INIT PTHREAD_MUTEX_INITIALIZER
-#elif defined(USE_FREERTOS)
-
-#else
-    typedef volatile uint32_t OnndoriLock_t;
-#endif
+#define ONNDORI_USE_LOCK    1
 
 
 typedef enum _OnndoriStat 

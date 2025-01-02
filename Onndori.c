@@ -1,20 +1,33 @@
+#include "stdlib.h"
 #include "Onndori.h"
+
+#if (ONNDORI_USE_LOCK == 1)
+    #if defined(__linux__)
+        #include <pthread.h>
+        typedef pthread_mutex_t     OnndoriLock_t;
+        #define Onndori_Lock()      pthread_mutex_lock(&s_tLock)
+        #define Onndori_UnLock()    pthread_mutex_unlock(&s_tLock)
+        #define Onndori_LockInit()  pthread_mutex_init(&s_tLock, NULL)
+    #elif defined(USE_FREERTOS)
+        // TODO
+    #else
+        typedef volatile uint32_t   OnndoriLock_t;
+        #define Onndori_Lock()      do{ s_tLock = 1; } while (0)
+        #define Onndori_UnLock()    do{ s_tLock = 0; } while (0)
+        #define Onndori_LockInit()  do{ s_tLock = 1; } while (0)
+    #endif
+
+    static OnndoriLock_t    s_tLock;
+
+#else
+    #define Onndori_Lock()    
+    #define Onndori_UnLock()  
+    #define Onndori_LockInit()
+#endif
+
 
 static OnndoriTimer_st *s_pList = NULL;
 static PlatformTick_ft  s_PlatformTick = NULL;
-static OnndoriLock_t    s_tLock;
-
-#if defined(__linux__)
-    #define Onndori_Lock()      pthread_mutex_lock(&s_tLock)
-    #define Onndori_UnLock()    pthread_mutex_unlock(&s_tLock)
-    #define Onndori_LockInit()  pthread_mutex_init(&s_tLock, NULL)
-#elif defined(USE_FREERTOS)
-    // TODO
-#else
-    #define Onndori_Lock()      do{ s_tLock = 1; } while (0)
-    #define Onndori_UnLock()    do{ s_tLock = 0; } while (0)
-    #define Onndori_LockInit()  do{ s_tLock = 1; } while (0)
-#endif
 
 
 static uint64_t GetTicks(void)
