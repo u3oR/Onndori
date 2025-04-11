@@ -6,12 +6,15 @@ BUILD_DIR = build
 CC  ?= gcc
 SZ  ?= size
 
+ONNDORI_PATHROOT := ../../src
+
 C_SOURCES := 
 C_SOURCES += example.c 
-C_SOURCES += Onndori.c
+C_SOURCES += $(ONNDORI_PATHROOT)/Onndori.c
 
 C_INCLUDES := 
 C_INCLUDES += -I$(CURDIR)
+C_INCLUDES += -I$(ONNDORI_PATHROOT)
 
 CFLAGS := 
 CFLAGS += -Wall 
